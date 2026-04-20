@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tati Moda Express | Checkout</title>
+    <title>Tati Moda Express | Tienda</title>
     <script src="https://cdn.tailwindcss.com/"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
@@ -12,13 +12,13 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fffcfc; }
         .serif { font-family: 'Playfair Display', serif; }
         .glass-card { background: white; border: 1px solid rgba(251, 113, 133, 0.1); }
-        input, select, textarea { border: 1px solid #f3f4f6 !important; }
-        input:focus, select:focus { border-color: #fb7185 !important; outline: none; ring: 0; }
+        input, select { border: 1px solid #f3f4f6 !important; }
+        input:focus, select:focus { border-color: #fb7185 !important; outline: none; }
     </style>
 </head>
-<body x-data="tatiStore()" class="min-h-screen pb-20">
+<body x-data="tatiStore()" class="min-h-screen pb-10">
 
-    <header class="bg-white border-b border-rose-50 px-6 py-4 mb-8">
+    <header class="bg-white border-b border-rose-50 px-6 py-4 mb-6">
         <div class="container mx-auto text-center">
             <h1 class="serif text-2xl text-rose-400">Tati Moda Express</h1>
         </div>
@@ -29,11 +29,11 @@
         <div x-show="view === 'catalog'" x-transition>
             <div class="grid gap-6">
                 <template x-for="product in products" :key="product.id">
-                    <div @click="selectProduct(product)" class="glass-card rounded-[2rem] overflow-hidden cursor-pointer shadow-sm hover:shadow-md transition-all">
-                        <img :src="product.image" class="w-full h-48 object-cover">
+                    <div @click="selectProduct(product)" class="glass-card rounded-[2rem] overflow-hidden cursor-pointer shadow-sm active:scale-95 transition-all">
+                        <img :src="product.image" class="w-full h-52 object-cover">
                         <div class="p-6 text-center">
-                            <h3 class="font-bold text-gray-800 uppercase text-sm tracking-widest" x-text="product.name"></h3>
-                            <p class="text-rose-400 text-xs font-bold mt-2">PEDIR AHORA ✨</p>
+                            <h3 class="font-bold text-gray-800 uppercase text-xs tracking-widest" x-text="product.name"></h3>
+                            <button class="mt-3 text-rose-400 text-[10px] font-bold border border-rose-100 px-4 py-1 rounded-full uppercase">Comprar ahora</button>
                         </div>
                     </div>
                 </template>
@@ -41,17 +41,16 @@
         </div>
 
         <div x-show="view === 'checkout'" x-cloak x-transition>
-            <button @click="view = 'catalog'" class="mb-6 flex items-center text-gray-400 text-[10px] font-bold uppercase tracking-widest">
-                ← Volver al catálogo
+            <button @click="view = 'catalog'" class="mb-4 text-gray-400 text-[10px] font-bold uppercase tracking-widest flex items-center">
+                ← Volver
             </button>
 
-            <div class="glass-card p-8 rounded-[2.5rem] shadow-xl shadow-rose-100/20">
-                <h2 class="serif text-xl mb-6 text-gray-800 italic">Información de Envío</h2>
+            <div class="glass-card p-8 rounded-[2.5rem] shadow-xl shadow-rose-100/10">
+                <h2 class="serif text-xl mb-6 text-gray-800 text-center italic">Finalizar Pedido</h2>
 
                 <form action="https://api.sheetmonkey.io/form/q1FGsLP6yBKxFbro3sJ6xH" method="POST" @submit="handleSubmit">
                     
                     <input type="hidden" name="Fecha y Hora" value="x-sheetmonkey-current-date-time">
-                    
                     <input type="hidden" name="Producto" :value="selectedProduct.name">
 
                     <div class="space-y-4">
@@ -61,8 +60,8 @@
                         </div>
 
                         <div>
-                            <label class="text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-1 block">WhatsApp</label>
-                            <input type="tel" name="Whatsapp" required placeholder="3..." class="w-full px-4 py-3 rounded-xl bg-gray-50 text-sm">
+                            <label class="text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-1 block">Whatsapp</label>
+                            <input type="tel" name="Whatsapp" required placeholder="Ej: 310..." class="w-full px-4 py-3 rounded-xl bg-gray-50 text-sm">
                         </div>
 
                         <div class="grid grid-cols-2 gap-4">
@@ -78,7 +77,7 @@
                             <div>
                                 <label class="text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-1 block">Ciudad</label>
                                 <select name="Ciudad" required class="w-full px-4 py-3 rounded-xl bg-gray-50 text-sm">
-                                    <template x-for="c in (colombia[form.dept] || ['Esperando...'])" :key="c">
+                                    <template x-for="c in (colombia[form.dept] || ['Seleccione...'])" :key="c">
                                         <option :value="c" x-text="c"></option>
                                     </template>
                                 </select>
@@ -87,16 +86,16 @@
 
                         <div>
                             <label class="text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-1 block">Direccion</label>
-                            <input type="text" name="Direccion" placeholder="Calle, #, Casa" required class="w-full px-4 py-3 rounded-xl bg-gray-50 text-sm">
+                            <input type="text" name="Direccion" placeholder="Calle, Carrera, # Casa" required class="w-full px-4 py-3 rounded-xl bg-gray-50 text-sm">
                         </div>
 
                         <div>
-                            <label class="text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-1 block">Info_Adicional (Opcional)</label>
-                            <input type="text" name="Info_Adicional" placeholder="Piso, Apto, Color..." class="w-full px-4 py-3 rounded-xl bg-gray-50 text-sm">
+                            <label class="text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-1 block">Info_Adicional</label>
+                            <input type="text" name="Info_Adicional" placeholder="Piso, Apto, Color fachada (Opcional)" class="w-full px-4 py-3 rounded-xl bg-gray-50 text-sm">
                         </div>
 
                         <div class="grid grid-cols-2 gap-4">
-                             <div>
+                            <div>
                                 <label class="text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-1 block">Metodo de pago</label>
                                 <select name="Metodo de pago" required class="w-full px-4 py-3 rounded-xl bg-gray-50 text-sm">
                                     <option>Contraentrega</option>
@@ -109,18 +108,21 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="w-full bg-rose-400 text-white font-bold py-4 rounded-2xl shadow-lg hover:bg-rose-500 transition-all uppercase tracking-widest text-xs mt-6">
-                            Realizar Pedido
+                        <button type="submit" class="w-full bg-rose-400 text-white font-bold py-4 rounded-2xl shadow-lg shadow-rose-100 hover:bg-rose-500 transition-all uppercase tracking-widest text-[10px] mt-6">
+                            Confirmar Pedido 🛍️
                         </button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <div x-show="view === 'success'" class="text-center py-20" x-cloak>
-            <h2 class="serif text-3xl mb-4 text-rose-400">¡Pedido Enviado!</h2>
-            <p class="text-gray-500 text-sm mb-10">En minutos te contactaremos para confirmar el envío.</p>
-            <button @click="view = 'catalog'" class="bg-gray-900 text-white px-8 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest">Regresar</button>
+        <div x-show="view === 'success'" class="text-center py-20" x-cloak x-transition>
+            <div class="text-rose-400 mb-4 flex justify-center">
+                <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+            </div>
+            <h2 class="serif text-3xl mb-2 text-gray-800">¡Recibido!</h2>
+            <p class="text-gray-500 text-sm mb-8 px-6">Tu pedido ha sido registrado con éxito. Pronto te contactaremos.</p>
+            <button @click="view = 'catalog'" class="bg-gray-900 text-white px-8 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest">Volver a la tienda</button>
         </div>
     </main>
 
@@ -137,22 +139,30 @@
                     { id: 4, name: 'JORDAN AIR RETRO 1', image: 'https://ugc.production.linktr.ee/8c63c901-915e-4be2-96ea-cc92b6d4503d_image.png' }
                 ],
                 colombia: {
-                    "Antioquia": ["Medellín", "Envigado", "Itagüí", "Rionegro"],
+                    "Antioquia": ["Medellín", "Envigado", "Itagüí", "Rionegro", "Bello", "Sabaneta"],
                     "Bogotá D.C.": ["Bogotá D.C."],
-                    "Valle del Cauca": ["Cali", "Palmira", "Tuluá"],
-                    "Atlántico": ["Barranquilla", "Soledad"],
-                    "Cundinamarca": ["Soacha", "Chía"],
-                    "Santander": ["Bucaramanga"],
-                    "Risaralda": ["Pereira"],
-                    "Quindío": ["Armenia"]
+                    "Valle del Cauca": ["Cali", "Palmira", "Tuluá", "Buga", "Jamundí"],
+                    "Atlántico": ["Barranquilla", "Soledad", "Puerto Colombia"],
+                    "Santander": ["Bucaramanga", "Floridablanca", "Girón", "Piedecuesta"],
+                    "Cundinamarca": ["Soacha", "Chía", "Zipaquirá", "Funza", "Mosquera"],
+                    "Bolívar": ["Cartagena", "Turbaco"],
+                    "Risaralda": ["Pereira", "Dosquebradas"],
+                    "Quindío": ["Armenia", "Calarcá"],
+                    "Meta": ["Villavicencio"],
+                    "Tolima": ["Ibagué"],
+                    "Huila": ["Neiva"],
+                    "Nariño": ["Pasto"],
+                    "Cesar": ["Valledupar"],
+                    "Norte de Santander": ["Cúcuta"]
                 },
                 selectProduct(product) {
                     this.selectedProduct = product;
                     this.view = 'checkout';
-                    window.scrollTo(0, 0);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 },
                 handleSubmit() {
-                    setTimeout(() => { this.view = 'success'; }, 800);
+                    // Esperamos un momento para que el navegador envíe a Sheet Monkey
+                    setTimeout(() => { this.view = 'success'; }, 1000);
                 }
             }
         }
